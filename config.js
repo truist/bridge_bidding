@@ -1,0 +1,6 @@
+{
+  "flowchart": {
+    "defaultRenderer": "elk"
+  }
+}
+

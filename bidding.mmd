@@ -1,0 +1,42 @@
+flowchart LR
+    Open[Open] -->|NT| NTRespond>Respond to NT]
+        NTRespond -->|"Sign off (well below game, or at game, in suit or NT)"| NTDone[[NT Done]]
+        NTRespond -->|"Invitational (2NT)"| NTInvitational([Respond to NT invite])
+            NTInvitational -->|Bid 3NT or Pass| NTDone
+                NTDone -->|"(NT is faster than suits)"| Done
+        NTRespond -->|"Forcing (in a suit)"| NTForcing([Respond to NT->Suit Force])
+            NTForcing -->|Bid 3NT or 4 in the suit| NTDone
+
+    Open -->|1 of a major| MajorRespond[Respond to Major opening]
+        MajorRespond -->|Same suit| SuitSupported>Rebid after support]
+            SuitSupported -->|Pass| Done[[Done]]
+            SuitSupported -->|"Invitatational (just below game)"| SuitInvitational([Respond to suit invite])
+                SuitInvitational -->|Bid game or Pass| Done
+            SuitSupported -->|Game| Done
+
+        MajorRespond -->|"New suit (forcing)"| NewSuit[Rebid after new suit]
+            NewSuit -->|Rebid opening suit| ResponderCaptain>Responder is Captain]
+            NewSuit -->|"Support responder's suit"| ResponderCaptain
+            NewSuit -->|NT| ResponderCaptain
+                ResponderCaptain -->|Pass or pick somewhere to sign off| Done
+            NewSuit -->|Third suit below the barrier| RespondersChoice(["Responder chooses between suits"])
+                RespondersChoice -->|Pass or opening suit| Done
+            NewSuit -->|Third suit above the barrier or jump| ForceToGame([Forced to game])
+                ForceToGame -->|Choose a suit at game level| Done
+
+        MajorRespond -->|NT| NTResponse>Rebid after NT]
+            NTResponse -->|"Pass, or opening suit at 2, or opening suit or NT at game (sign off)"| Done
+            NTResponse -->|"2NT (Invitational)"| NTInvitational2([Respond to NT invite])
+                NTInvitational2 -->|Bid 3NT or Pass| Done
+            NTResponse -->|Third suit below the barrier| RespondersChoice
+            NTResponse -->|Third suit above the barrier or jump| ForceToGame
+            NTResponse -->|"Opening suit invitational (just below game)"| SuitInvitational
+
+    Open -->|1 of a minor| MinorRespond[Respond to Minor opening]
+        MinorRespond -->|Same suit| SuitSupported
+        MinorRespond -->|"New suit (forcing)"| NewSuit
+        MinorRespond -->|NT| NTResponse
+
+    Open -->|2C| 2CRespond[Respond to 2C]
+        2CRespond -->|???| Unsure[???]
+
