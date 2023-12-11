@@ -1,47 +1,49 @@
 flowchart LR
-    Open[Open] -->|NT| NTRespond>Respond to NT]
-        NTRespond ---|"Sign off\n(well below game, or at game)"| Spacer1{" "}
-        Spacer1 --> NTDone[[NT Done]]
-        NTRespond -->|"Invitational\n(2NT)"| NTInvitational([Respond to NT invite])
-            NTInvitational -->|Bid 3NT\nor Pass| NTDone
-                NTDone -->|"(NT is faster than suits)"| Done
-        NTRespond -->|"New suit (forcing)"| NTForcing([Respond to NT->Suit Force])
-            NTForcing -->|Bid 3NT\nor 4 in the suit| NTDone
+  Open[Open] -->|NT| NTRespond>Respond to NT]
+    NTRespond ---|"Pass or sign off\n(bid well below game\nor at game)"| Spacer1{" "}
+      Spacer1 --> NTDone[[NT Done]]
+    NTRespond -->|"Invitational\n(2NT)"| NTInvitational([Rebid after NT invite])
+      NTInvitational -->|Bid 3NT\nor Pass| NTDone
+    NTRespond -->|"New suit (forcing)"| NTForcing([Rebid after NT->Suit force])
+      NTForcing -->|Bid 3NT\nor 4 in the suit| NTDone
 
-    Open -->|1 of a major| MajorRespond[Respond to Major opening]
-        MajorRespond -->|Same suit| SuitSupported>Rebid after support]
-            SuitSupported ---|Pass or Game| Spacer2{" "}
-            Spacer2 -->|"&nbsp;"| Done[[Done]]
-            SuitSupported -->|"Invitatational\n(just below game)"| Invitational([Respond to invite])
-                Invitational -->|Bid game or Pass| Done
+  Open -->|1 of a major| MajorRespond[Respond to Major opening]
+    MajorRespond ---|Pass| Spacer4{" "}
+      Spacer4 ---|"&nbsp;"| Spacer5{" "}
+        Spacer5 -->|"&nbsp;"| Done[[Suit Done]]
 
-        MajorRespond -->|"New suit (forcing)"| NewSuit[Rebid after new suit]
-            NewSuit -->|Rebid opening suit| ResponderCaptain>Responder is Captain]
-            NewSuit -->|"Support responder's suit"| ResponderCaptain
-            NewSuit -->|NT| ResponderCaptain
-                ResponderCaptain -->|Pass or pick somewhere to sign off| Done
-            NewSuit -->|Third suit below the barrier| RespondersChoice(["Choose between suits"])
-                RespondersChoice -->|Pass or earlier suit| Done
-            NewSuit -->|Third suit above the barrier\nor jump| ForceToGame([Forced to game])
-                ForceToGame -->|Choose a suit at game level| Done
+    MajorRespond -->|Same suit| SuitSupported>Rebid after support]
+      SuitSupported ---|Pass or Game| Spacer2{" "}
+        Spacer2 -->|"&nbsp;"| Done
+      SuitSupported -->|"Invitatational\n(just below game)"| Invitational([Respond to invite])
+        Invitational -->|Pass or Game| Done
 
-        MajorRespond -->|NT| NTResponse>Rebid after NT]
-            NTResponse ---|"Sign off\n(Pass, or opening suit at 2,\nor game)"| Spacer3{" "}
-            Spacer3 -->|"&nbsp;"| Done
-            NTResponse -->|"Invitational\n(just below game)"| Invitational
-            NTResponse -->|Third suit below the barrier| RespondersChoice
-            NTResponse -->|Third suit above the barrier\nor jump| ForceToGame
+    MajorRespond -->|"New suit (forcing)"| NewSuit[Rebid after new suit]
+      NewSuit -->|All bids?| ResponderMultiple>Respond to multiple suits]
+        ResponderMultiple -->|TBD| TBD[[TBD]]
 
-    Open -->|1 of a minor| MinorRespond[Respond to Minor opening]
-        MinorRespond -->|Same suit| SuitSupported
-        MinorRespond -->|"New suit (forcing)"| NewSuit
-        MinorRespond -->|NT| NTResponse
+    MajorRespond -->|NT| NTResponse>Rebid after NT]
+      NTResponse ---|"Sign off\n(Pass\nor opening suit at 2\nor game)"| Spacer3{" "}
+        Spacer3 -->|"&nbsp;"| Done
+      NTResponse -->|"Invitational\n(just below game)"| Invitational
+      NTResponse -->|Third suit| ResponderMultiple
 
-    Open -->|2C| 2CRespond[Respond to 2C]
-        2CRespond -->|???| Unsure[???]
+  Open -->|1 of a minor| MinorRespond[Respond to Minor opening]
+    MinorRespond ---|Pass| Spacer4
+    MinorRespond -->|Same suit| SuitSupported
+    MinorRespond -->|"New suit (forcing)"| NewSuit
+    MinorRespond -->|NT| NTResponse
 
-    Legend -->|Chosen bid| CaptainUndecided["Decision point\n(Captain undecided)"]
+  Open -->|2C| 2CRespond[Respond to 2C]
+    2CRespond ---|TBD| Spacer6{" "}
+      Spacer6 ---|"&nbsp;"| Spacer7{" "}
+        Spacer7 -->|"&nbsp;"| TBD
+
+  Legend -->|Chosen bid| CaptainUndecided["Decision point\n(Captain undecided)"]
     CaptainUndecided -->|Chosen bid| Captain>Captian]
-    Captain -->|Chosen bid| NotCaptain([Not Captain])
-    NotCaptain -->|"(Spacer; ignore it)"| LegendDone{" "}
+      Captain -->|Chosen bid| NotCaptain([Not Captain])
+        NotCaptain -->|Chosen bid| LegendDone[[Done]]
+      CaptainUndecided ---|Chosen bid| SpacerLegend1{" "}
+        SpacerLegend1 ---|"(Spacers;\nignore them)"| SpacerLegend2{" "}
+          SpacerLegend2 -->|"&nbsp;"| LegendDone
 
