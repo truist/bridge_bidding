@@ -39,6 +39,24 @@ flowchart LR
       Spacer6 ---|"&nbsp;"| Spacer7{" "}
         Spacer7 -->|"&nbsp;"| TBD
 
+  Overcall[Overcall] -->|Suit or NT| BidAdvance[Respond to Overcall]
+    BidAdvance ---|Support| SpacerSupport{" "}
+      SpacerSupport -->|"&nbsp;"| SpacerMerge{" "}
+        SpacerMerge -->|"&nbsp;"| TBD
+    BidAdvance ---|NT| SpacerNT{" "}
+      SpacerNT -->|"&nbsp;"| SpacerMerge
+    BidAdvance ---|New suit| SpacerNew{" "}
+      SpacerNew -->|"&nbsp;"| SpacerMerge
+    BidAdvance ---|Cue bid| SpacerCue{" "}
+      SpacerCue -->|"&nbsp;"| SpacerMerge
+
+  Overcall -->|Double| DoubleAdvance[Respond to Takeout Double]
+    DoubleAdvance ---|Pass| SpacerPass{" "}
+      SpacerPass -->|"&nbsp;"| SpacerMerge
+    DoubleAdvance ---|New suit| SpacerNew
+    DoubleAdvance ---|NT| SpacerNT
+    DoubleAdvance ---|Cue bid| SpacerCue
+
   Legend -->|Chosen bid| CaptainUndecided["Decision point\n(Captain undecided)"]
     CaptainUndecided -->|Chosen bid| Captain>Captian]
       Captain -->|Chosen bid| NotCaptain([Not Captain])
