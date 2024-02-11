@@ -34,28 +34,25 @@ flowchart LR
     MinorRespond -->|"New suit (forcing)"| NewSuit
     MinorRespond -->|NT| NTResponse
 
-  Open -->|2C| 2CRespond[Respond to 2C]
-    2CRespond ---|TBD| Spacer6{" "}
-      Spacer6 ---|"&nbsp;"| Spacer7{" "}
-        Spacer7 -->|"&nbsp;"| TBD
+  Overcall[Overcall] -->|Suit| OvercallAdvance[Respond to suit Overcall]
+    OvercallAdvance ---|Pass| SpacerOvercallPass{" "}
+      SpacerOvercallPass -->|"&nbsp;"| OvercallDone[[Overcall Done]]
+    OvercallAdvance -->|Support| OvercallRebid>Overcall Rebid]
+      OvercallRebid -->|Any bid| OvercallDone
+    OvercallAdvance -->|NT| OvercallRebid
+    OvercallAdvance -->|New suit| OvercallRebid
+    OvercallAdvance -->|Cue bid| Cue([Respond to Cue bid])
+      Cue -->|Any bid| CueRebid>Cue Rebid]
+        CueRebid -->|Any bid| OvercallDone
 
-  Overcall[Overcall] -->|Suit or NT| BidAdvance[Respond to Overcall]
-    BidAdvance ---|Support| SpacerSupport{" "}
-      SpacerSupport -->|"&nbsp;"| SpacerMerge{" "}
-        SpacerMerge -->|"&nbsp;"| TBD
-    BidAdvance ---|NT| SpacerNT{" "}
-      SpacerNT -->|"&nbsp;"| SpacerMerge
-    BidAdvance ---|New suit| SpacerNew{" "}
-      SpacerNew -->|"&nbsp;"| SpacerMerge
-    BidAdvance ---|Cue bid| SpacerCue{" "}
-      SpacerCue -->|"&nbsp;"| SpacerMerge
+  Overcall -->|Double| TakeoutAdvance[Respond to Takeout Double]
+    TakeoutAdvance -->|Pass| TakeoutRebid>Takeout Rebid]
+      TakeoutRebid -->|Any bid| OvercallDone
+    TakeoutAdvance -->|New suit| TakeoutRebid
+    TakeoutAdvance -->|NT| TakeoutRebid
+    TakeoutAdvance -->|Cue bid| Cue
 
-  Overcall -->|Double| DoubleAdvance[Respond to Takeout Double]
-    DoubleAdvance ---|Pass| SpacerPass{" "}
-      SpacerPass -->|"&nbsp;"| SpacerMerge
-    DoubleAdvance ---|New suit| SpacerNew
-    DoubleAdvance ---|NT| SpacerNT
-    DoubleAdvance ---|Cue bid| SpacerCue
+  Overcall[Overcall] -->|NT| NTRespond
 
   Legend -->|Chosen bid| CaptainUndecided["Decision point\n(Captain undecided)"]
     CaptainUndecided -->|Chosen bid| Captain>Captian]
