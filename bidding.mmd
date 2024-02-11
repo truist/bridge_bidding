@@ -1,21 +1,20 @@
 flowchart LR
   Open[Open] -->|NT| NTRespond>Respond to NT]
-    NTRespond ---|"Pass or sign off\n(bid well below game\nor at game)"| Spacer1{" "}
+    NTRespond ---|"Sign off"| Spacer1{" "}
       Spacer1 --> NTDone[[NT Done]]
-    NTRespond -->|"Invitational\n(2NT)"| NTInvitational([Rebid after NT invite])
+    NTRespond -->|"2NT"| NTInvitational([Rebid after NT invite])
       NTInvitational -->|Bid 3NT\nor Pass| NTDone
-    NTRespond -->|"New suit (forcing)"| NTForcing([Rebid after NT->Suit force])
+    NTRespond -->|"3 of a major (forcing)"| NTForcing([Rebid after NT->Suit force])
       NTForcing -->|Bid 3NT\nor 4 in the suit| NTDone
 
   Open -->|1 of a major| MajorRespond[Respond to Major opening]
     MajorRespond ---|Pass| Spacer4{" "}
-      Spacer4 ---|"&nbsp;"| Spacer5{" "}
-        Spacer5 -->|"&nbsp;"| Done[[Suit Done]]
+      Spacer4 ---|"&nbsp;"| Done[[Suit Done]]
 
     MajorRespond -->|Same suit| SuitSupported>Rebid after support]
       SuitSupported ---|Pass or Game| Spacer2{" "}
         Spacer2 -->|"&nbsp;"| Done
-      SuitSupported -->|"Invitatational\n(just below game)"| Invitational([Respond to invite])
+      SuitSupported -->|"Invitation"| Invitational([Respond to invite])
         Invitational -->|Pass or Game| Done
 
     MajorRespond -->|"New suit (forcing)"| NewSuit[Rebid after new suit]
@@ -23,9 +22,9 @@ flowchart LR
         ResponderMultiple -->|TBD| TBD[[TBD]]
 
     MajorRespond -->|NT| NTResponse>Rebid after NT]
-      NTResponse ---|"Sign off\n(Pass\nor opening suit at 2\nor game)"| Spacer3{" "}
+      NTResponse ---|"Sign off"| Spacer3{" "}
         Spacer3 -->|"&nbsp;"| Done
-      NTResponse -->|"Invitational\n(just below game)"| Invitational
+      NTResponse -->|"Invitation"| Invitational
       NTResponse -->|Third suit| ResponderMultiple
 
   Open -->|1 of a minor| MinorRespond[Respond to Minor opening]
