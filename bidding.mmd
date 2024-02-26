@@ -59,12 +59,13 @@ flowchart LR
         TakeoutRebid -->|Any bid| OvercallDone
       TakeoutAdvance -->|New suit| TakeoutRebid
       TakeoutAdvance -->|NT| TakeoutRebid
-      TakeoutAdvance -->|Cue bid| Cue
   end
 
   subgraph CueGraph [Cue bids and Responses]
       OvercallAdvance -->|Cue bid| Cue([Respond to Cue bid])
         Cue -->|Any bid| CueRebid>Cue Rebid]
           CueRebid -->|TBD| CueTBD[[TBD]]
+
+      TakeoutAdvance -->|Cue bid| Cue
   end
 
