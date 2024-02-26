@@ -1,63 +1,70 @@
 flowchart LR
-  Open[Open] -->|NT| NTRespond>Respond to NT]
-    NTRespond ---|"Sign off"| Spacer1{" "}
-      Spacer1 --> NTDone[[NT Done]]
-    NTRespond -->|"2NT"| NTInvitational([Rebid after NT invite])
-      NTInvitational -->|Bid 3NT\nor Pass| NTDone
-    NTRespond -->|"3 of a major (forcing)"| NTForcing([Rebid after NT->Suit force])
-      NTForcing -->|Bid 3NT\nor 4 in the suit| NTDone
+  Open[Open]
+    Open -->|NT| NTRespond>Respond to NT]
+    Open -->|1 of a major| MajorRespond[Respond to Major opening]
+    Open -->|1 of a minor| MinorRespond[Respond to Minor opening]
 
-  Open -->|1 of a major| MajorRespond[Respond to Major opening]
-    MajorRespond ---|Pass| Spacer4{" "}
-      Spacer4 ---|"&nbsp;"| Done[[Suit Done]]
+  subgraph NTOpensGraph [NT Opens and Responses]
+      NTRespond ---|"Sign off"| Spacer1{" "}
+        Spacer1 --> NTDone[[NT Done]]
+      NTRespond -->|"2NT"| NTInvitational([Rebid after NT invite])
+        NTInvitational -->|Bid 3NT\nor Pass| NTDone
+      NTRespond -->|"3 of a major (forcing)"| NTForcing([Rebid after NT->Suit force])
+        NTForcing -->|Bid 3NT\nor 4 in the suit| NTDone
+  end
 
-    MajorRespond -->|Same suit| SuitSupported>Rebid after support]
-      SuitSupported ---|Pass or Game| Spacer2{" "}
-        Spacer2 -->|"&nbsp;"| Done
-      SuitSupported -->|"Invitation"| Invitational([Respond to invite])
-        Invitational -->|Pass or Game| Done
+  subgraph SuitOpensGraph [Suit Opens and Responses]
+      MajorRespond ---|Pass| Spacer4{" "}
+        Spacer4 ---|"&nbsp;"| Done[[Suit Done]]
 
-    MajorRespond -->|"New suit (forcing)"| NewSuit[Rebid after new suit]
-      NewSuit -->|All bids?| ResponderMultiple>Respond to multiple suits]
-        ResponderMultiple -->|TBD| TBD[[TBD]]
+      MajorRespond -->|Same suit| SuitSupported>Rebid after support]
+        SuitSupported ---|Pass or Game| Spacer2{" "}
+          Spacer2 -->|"&nbsp;"| Done
+        SuitSupported -->|"Invitation"| Invitational([Respond to invite])
+          Invitational -->|Pass or Game| Done
 
-    MajorRespond -->|NT| NTResponse>Rebid after NT]
-      NTResponse ---|"Sign off"| Spacer3{" "}
-        Spacer3 -->|"&nbsp;"| Done
-      NTResponse -->|"Invitation"| Invitational
-      NTResponse -->|Third suit| ResponderMultiple
+      MajorRespond -->|"New suit (forcing)"| NewSuit[Rebid after new suit]
 
-  Open -->|1 of a minor| MinorRespond[Respond to Minor opening]
-    MinorRespond ---|Pass| Spacer4
-    MinorRespond -->|Same suit| SuitSupported
-    MinorRespond -->|"New suit (forcing)"| NewSuit
-    MinorRespond -->|NT| NTResponse
+      MajorRespond -->|NT| NTResponse>Rebid after NT]
+        NTResponse ---|"Sign off"| Spacer3{" "}
+          Spacer3 -->|"&nbsp;"| Done
+        NTResponse -->|"Invitation"| Invitational
 
-  Overcall[Overcall] -->|Suit| OvercallAdvance[Respond to suit Overcall]
-    OvercallAdvance ---|Pass| SpacerOvercallPass{" "}
-      SpacerOvercallPass -->|"&nbsp;"| OvercallDone[[Overcall Done]]
-    OvercallAdvance -->|Support| OvercallRebid>Overcall Rebid]
-      OvercallRebid -->|Any bid| OvercallDone
-    OvercallAdvance -->|NT| OvercallRebid
-    OvercallAdvance -->|New suit| OvercallRebid
-    OvercallAdvance -->|Cue bid| Cue([Respond to Cue bid])
-      Cue -->|Any bid| CueRebid>Cue Rebid]
-        CueRebid -->|Any bid| OvercallDone
+      MinorRespond ---|Pass| Spacer4
+      MinorRespond -->|Same suit| SuitSupported
+      MinorRespond -->|"New suit (forcing)"| NewSuit
+      MinorRespond -->|NT| NTResponse
+  end
 
-  Overcall -->|Double| TakeoutAdvance[Respond to Takeout Double]
-    TakeoutAdvance -->|Pass| TakeoutRebid>Takeout Rebid]
-      TakeoutRebid -->|Any bid| OvercallDone
-    TakeoutAdvance -->|New suit| TakeoutRebid
-    TakeoutAdvance -->|NT| TakeoutRebid
-    TakeoutAdvance -->|Cue bid| Cue
+  subgraph ToolsGraph [Use the Tools, Luke!]
+        NTResponse -->|Third suit| ResponderMultiple
+        NewSuit -->|All bids?| ResponderMultiple>Respond to multiple suits]
+          ResponderMultiple -->|TBD| ToolsTBD[[TBD]]
+  end
 
-  Overcall[Overcall] -->|NT| NTRespond
+  Overcall[Overcall]
+    Overcall -->|Suit| OvercallAdvance[Respond to suit Overcall]
+    Overcall -->|Double| TakeoutAdvance[Respond to Takeout Double]
+    Overcall -->|NT| NTRespond
 
-  Legend -->|Chosen bid| CaptainUndecided["Decision point\n(Captain undecided)"]
-    CaptainUndecided -->|Chosen bid| Captain>Captain]
-      Captain -->|Chosen bid| NotCaptain([Not Captain])
-        NotCaptain -->|Chosen bid| LegendDone[[Done]]
-      CaptainUndecided ---|Chosen bid| SpacerLegend1{" "}
-        SpacerLegend1 ---|"(Spacers;\nignore them)"| SpacerLegend2{" "}
-          SpacerLegend2 -->|"&nbsp;"| LegendDone
+  subgraph OvercallsGraph [Overcalls and Advances]
+      OvercallAdvance ---|Pass| SpacerOvercallPass{" "}
+        SpacerOvercallPass -->|"&nbsp;"| OvercallDone[[Overcall Done]]
+      OvercallAdvance -->|Support| OvercallRebid>Overcall Rebid]
+        OvercallRebid -->|Any bid| OvercallDone
+      OvercallAdvance -->|NT| OvercallRebid
+      OvercallAdvance -->|New suit| OvercallRebid
+
+      TakeoutAdvance -->|Pass| TakeoutRebid>Takeout Rebid]
+        TakeoutRebid -->|Any bid| OvercallDone
+      TakeoutAdvance -->|New suit| TakeoutRebid
+      TakeoutAdvance -->|NT| TakeoutRebid
+      TakeoutAdvance -->|Cue bid| Cue
+  end
+
+  subgraph CueGraph [Cue bids and Responses]
+      OvercallAdvance -->|Cue bid| Cue([Respond to Cue bid])
+        Cue -->|Any bid| CueRebid>Cue Rebid]
+          CueRebid -->|TBD| CueTBD[[TBD]]
+  end
 
