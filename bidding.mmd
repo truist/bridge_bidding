@@ -18,10 +18,10 @@ flowchart LR
         Spacer4 ---|"&nbsp;"| Done[[Suit Done]]
 
       MajorRespond -->|Same suit| SuitSupported>Rebid after support]
-        SuitSupported ---|Pass or Game| Spacer2{" "}
+        SuitSupported ---|Sign off| Spacer2{" "}
           Spacer2 -->|"&nbsp;"| Done
         SuitSupported -->|"Invitation"| Invitational([Respond to invite])
-          Invitational -->|Pass or Game| Done
+          Invitational -->|Sign off| Done
 
       MajorRespond -->|"New suit (forcing)"| NewSuit[Rebid after new suit]
 
@@ -29,17 +29,17 @@ flowchart LR
         NTResponse ---|"Sign off"| Spacer3{" "}
           Spacer3 -->|"&nbsp;"| Done
         NTResponse -->|"Invitation"| Invitational
+        NTResponse ---|Third suit| RespondMulti([Respond to multiple suits])
 
       MinorRespond ---|Pass| Spacer4
       MinorRespond -->|Same suit| SuitSupported
       MinorRespond -->|"New suit (forcing)"| NewSuit
       MinorRespond -->|NT| NTResponse
-  end
 
-  subgraph ToolsGraph [Use the Tools, Luke!]
-        NTResponse -->|Third suit| ResponderMultiple
-        NewSuit -->|All bids?| ResponderMultiple>Respond to multiple suits]
-          ResponderMultiple -->|TBD| ToolsTBD[[TBD]]
+      NewSuit ---|"Support, sign off"| Spacer5{" "}
+        Spacer5 -->|"&nbsp;"| Done
+      NewSuit -->|"Support, invitation"| Invitational
+      NewSuit ---|"All other bids"| RespondMulti
   end
 
   Overcall[Overcall]
@@ -54,18 +54,21 @@ flowchart LR
         OvercallRebid -->|Any bid| OvercallDone
       OvercallAdvance -->|NT| OvercallRebid
       OvercallAdvance -->|New suit| OvercallRebid
+      OvercallAdvance ---|Cue bid| Cue([Respond to Cue bid])
 
       TakeoutAdvance -->|Pass| TakeoutRebid>Takeout Rebid]
         TakeoutRebid -->|Any bid| OvercallDone
       TakeoutAdvance -->|New suit| TakeoutRebid
       TakeoutAdvance -->|NT| TakeoutRebid
+      TakeoutAdvance ---|Cue bid| Cue
+
+      Cue ---|Any bid| Spacer8{" "}
   end
 
-  subgraph CueGraph [Cue bids and Responses]
-      OvercallAdvance -->|Cue bid| Cue([Respond to Cue bid])
-        Cue -->|Any bid| CueRebid>Cue Rebid]
-          CueRebid -->|TBD| CueTBD[[TBD]]
+  subgraph ToolsGraph [Use the Tools, Luke!]
+        RespondMulti --> Tools{{Use the bidding tools until done}}
+        Spacer8 --> Tools
 
-      TakeoutAdvance -->|Cue bid| Cue
+        Tools --> ToolsDone[[Done]]
   end
 
