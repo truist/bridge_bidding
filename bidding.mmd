@@ -1,19 +1,61 @@
 flowchart LR
   Open[Open]
-    Open -->|NT| NTRespond>Respond to NT]
+    Open -->|NT| NTChoice{{Standard or conventions?}}
     Open -->|1 of a major| MajorRespond[Respond to Major opening]
     Open -->|1 of a minor| MinorRespond[Respond to Minor opening]
 
-  subgraph NTOpensGraph [NT Opens and Responses]
-      NTRespond ---|"Sign off"| Spacer1{" "}
-        Spacer1 --> NTDone[[NT Done]]
-      NTRespond -->|"2NT"| NTInvitational([Rebid after NT invite])
-        NTInvitational -->|Bid 3NT\nor Pass| NTDone
-      NTRespond -->|"3 of a major (forcing)"| NTForcing([Rebid after NT->Suit force])
-        NTForcing -->|Bid 3NT\nor 4 in the suit| NTDone
-  end
+    subgraph NTOpensGraph [NT Opens and Responses]
+      NTChoice ---|Standard| NTRespond>"Respond to NT\n(standard)"]
+      NTChoice ---|Conventions| NTConventions>"Respond to NT\n(conventions)"]
 
-  subgraph SuitOpensGraph [Suit Opens and Responses]
+        NTRespond ---|"Sign off"| Spacer1{" "}
+          Spacer1 --> NTDone[[NT Done]]
+        NTRespond -->|"2NT"| NTInvitational([Rebid after NT invite])
+          NTInvitational -->|3NT or Pass| NTDone
+        NTRespond -->|"3 of a major\n(forcing)"| NTForcing([Rebid after NT->Suit force])
+          NTForcing -->|3NT or\n4 in the suit| NTDone
+
+
+        NTConventions -->|"2C (Stayman)"| Stayman([Required Stayman response])
+
+        subgraph StaymanGraph [Stayman]
+          Stayman -->|2D, 2S| StaymanNextBidSimple>Bid after Stayman]
+          Stayman -->|2H| StaymanNextBidHearts>Bid after Stayman hearts bid]
+            StaymanNextBidHearts -->|2NT, 3NT| StaymanNoHeartFit([Bid after no heart fit])
+        end
+            StaymanNextBidSimple -->|Invitation| NTInvite([Respond to invite])
+            StaymanNextBidHearts -->|3H| NTInvite
+            StaymanNextBidSimple -->|game| NTDone
+            StaymanNextBidHearts -->|4H| NTDone
+              StaymanNoHeartFit -->|Pass, 4S, 3NT| NTDone
+
+
+              NTInvite -->|Game or Pass| NTDone
+
+
+        NTConventions -->|"2D or 2H\n(Transfer to major)"| TransferResponse([Required transfer response])
+        NTConventions -->|"2S\n(Transfer to minor)"| TransferResponse
+
+        subgraph Transfer [Transfers]
+          TransferResponse -->|2 of major| TransferBid[Bid after major transfer]
+            TransferBid -->|2NT| TransferSuitAndGameInvite[Respond to suit and game invite]
+
+            TransferBid -->|3NT| TransferSwitchToMajor[Switch to the major]
+
+          TransferResponse -->|3C| TransferMinor>Select the right minor]
+        end
+            TransferBid -->|3 of the major| NTInvite([Respond to invite])
+            TransferBid -->|pass, 4 of the major| NTDone
+              TransferSuitAndGameInvite -->|pass, 3NT, 3 of major, 4 of major| NTDone
+              TransferSwitchToMajor -->|pass, 4 of the major| NTDone
+            TransferMinor -->|pass, 3D| NTDone
+
+
+
+
+    end
+
+    subgraph SuitOpensGraph [Suit Opens and Responses]
       MajorRespond ---|Pass| Spacer4{" "}
         Spacer4 ---|"&nbsp;"| Done[[Suit Done]]
 
@@ -40,14 +82,14 @@ flowchart LR
         Spacer5 -->|"&nbsp;"| Done
       NewSuit -->|"Support, invitation"| Invitational
       NewSuit ---|"All other bids"| RespondMulti
-  end
+    end
 
   Overcall[Overcall]
     Overcall -->|Suit| OvercallAdvance[Respond to suit Overcall]
     Overcall -->|Double| TakeoutAdvance[Respond to Takeout Double]
-    Overcall -->|NT| NTRespond
+    Overcall -->|NT| NTChoice
 
-  subgraph OvercallsGraph [Overcalls and Advances]
+    subgraph OvercallsGraph [Overcalls and Advances]
       OvercallAdvance ---|Pass| SpacerOvercallPass{" "}
         SpacerOvercallPass -->|"&nbsp;"| OvercallDone[[Overcall Done]]
       OvercallAdvance -->|Support| OvercallRebid>Overcall Rebid]
@@ -63,12 +105,13 @@ flowchart LR
       TakeoutAdvance ---|Cue bid| Cue
 
       Cue ---|Any bid| Spacer8{" "}
-  end
+    end
 
-  subgraph ToolsGraph [Use the Tools, Luke!]
+      subgraph ToolsGraph [Bidding tools]
         RespondMulti --> Tools{{Use the bidding tools until done}}
         Spacer8 --> Tools
+        TransferBid -->|the other major| Tools
 
         Tools --> ToolsDone[[Done]]
-  end
+      end
 
