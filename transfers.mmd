@@ -20,22 +20,30 @@ flowchart LR
           NoFitInvitational  -->|3NT| InvitationalHighPoints([Opener has 17 points])
         NoMajor -->|3NT| NTGame([Responder has 10+ points])
       Stayman -->|2H| HeartMajor([Opener has 4 hearts, may have 4 spades])
-        HeartMajor -->|2NT| SpadeSecondChance([Responder has 4 spades and <10 points])
-          SpadeSecondChance -->|4S| SpadeChanceWon([Opener has 4 spades and 17 points])
-          SpadeSecondChance -->|Pass| InvitationalLowPoints
+        HeartMajor -->|2NT| SpadeSecondChanceLowPoints([Responder has 4 spades and <10 points])
+          SpadeSecondChanceLowPoints -->|4S| SpadeChanceWonHighPoints([Opener has 4 spades and 17 points])
+          SpadeSecondChanceLowPoints -->|3NT| SpadeChanceLostHighPoints([Opener has <4 spades and 17 points])
+          SpadeSecondChanceLowPoints -->|Pass| InvitationalLowPoints
         HeartMajor -->|3H| SuitInvitational([Suit fit, responder has <10 points])
           SuitInvitational -->|Pass| InvitationalLowPoints
           SuitInvitational -->|4 of suit| InvitationalHighPoints
+        HeartMajor -->|3NT| SpadeSecondChanceHighPoints([Responder has 4 spades and 10+ points])
+          SpadeSecondChanceHighPoints -->|4S| SpadeChanceWon([Opener has 4 spades])
         HeartMajor -->|4H| GameFitResponder([Suit fit, responder has 10+ points])
       Stayman -->|2S| SpadeMajor([Opener has 4 spades, does not have 4 hearts])
         SpadeMajor -->|2NT| NoFitInvitational
         SpadeMajor -->|3S| SuitInvitational
+        SpadeMajor -->|3NT| NoFitNT([No suit fit, responder has 10+ points])
         SpadeMajor -->|4S| GameFitResponder
   end
             InvitationalLowPoints --- NTDone[["NT Done (conventions)"]]
             InvitationalHighPoints -->|Pass| NTDone
           NTGame -->|Pass| NTDone
+            SpadeChanceWonHighPoints -->|Pass| NTDone
+            SpadeChanceLostHighPoints -->|Pass| NTDone
             SpadeChanceWon -->|Pass| NTDone
+          SpadeSecondChanceHighPoints -->|Pass| NTDone
+          NoFitNT -->|Pass| NTDone
           GameFitResponder -->|Pass| NTDone
 
     NTConventions -->|"2D or 2H (transfer to major)"| TransferMajor([Responder has a 5+ card major])
@@ -51,10 +59,11 @@ flowchart LR
 
 
         AfterMajorTransfer -->|3NT| FiveCardMajorHighPoints([Responder has exactly 5 cards and 10+ points])
-          FiveCardMajorHighPoints -->|Pass| OnlyTwo([Opener has 2 of the suit])
-          FiveCardMajorHighPoints -->|4 of major| ThreeOrMore([Opener has 3 or more of the suit])
+          FiveCardMajorHighPoints -->|Pass| OnlyTwo([Opener has 2 of the major])
+          FiveCardMajorHighPoints -->|4 of major| ThreeOrMore([Opener has 3 or more of the major])
 
         AfterMajorTransfer -->|3 of major| SixCardMajorLowPoints([Responder has 6+ cards and 8-9 points])
+          SixCardMajorLowPoints -->|4 of major| Has17([Opener has 17 points])
           SixCardMajorLowPoints -->|Pass| LessThan17([Opener has less than 17 points])
 
         AfterMajorTransfer -->|4 of major| SixCardMajorHighPoints([Responder has 6+ cards and 10+ points])
@@ -67,6 +76,7 @@ flowchart LR
             FourOfMajorHighPoints -->|Pass| NTDone
             OnlyTwo --- NTDone
             ThreeOrMore -->|Pass| NTDone
+            Has17 --- NTDone
             LessThan17 --- NTDone
           SixCardMajorHighPoints -->|Pass| NTDone
 
