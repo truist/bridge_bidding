@@ -12,10 +12,10 @@ flowchart LR
 
     NTConventions -->|"2C (Stayman)"| Stayman([Required Stayman response])
 
-  subgraph StaymanGraph2 [Stayman]
-      Stayman -->|2D, 2S| StaymanNextBidSimple([Bid after Stayman])
+  subgraph StaymanGraph [Stayman]
+      Stayman -->|2D, 2S| StaymanNextBidSimple>Bid after Stayman]
         StaymanNextBidSimple -->|invitation| StaymanInviteRespond([Respond to invite])
-      Stayman -->|2H| StaymanNextBidHearts([Bid after Stayman hearts bid])
+      Stayman -->|2H| StaymanNextBidHearts>Bid after Stayman hearts bid]
         StaymanNextBidHearts -->|3H| StaymanInviteRespond
         StaymanNextBidHearts -->|2NT, 3NT| StaymanNoHeartFit([Bid after no heart fit])
   end
@@ -27,56 +27,24 @@ flowchart LR
 
 
 
-    NTConventions -->|"2D or 2H (transfer to major)"| TransferMajor([Responder has a 5+ card major])
-    NTConventions -->|"2S (transfer to minor)"| TransferMinor([Responder has 6+ of minor and a weak hand])
+    NTConventions -->|"2D or 2H\n(transfer to major)"| TransferResponse([Required transfer response])
+    NTConventions -->|"2S\n(transfer to minor)"| TransferResponse
+
   subgraph Transfer [Transfers]
-      TransferMajor -->|2 of major| AfterMajorTransfer([Accept the transfer])
-        AfterMajorTransfer -->|Pass| LowPoints([Responder has 0-7 points])
+      TransferResponse -->|2 of major| TransferBid[Bid after major transfer]
+        TransferBid -->|3 of the major| TransferInvite([Respond to invite])
+        TransferBid -->|2NT| TransferSuitAndGameInvite[Respond to suit and game invite]
 
-        AfterMajorTransfer -->|2NT| FiveCardMajorLowPoints([Responder has exactly 5 cards and 8-9 points])
-          FiveCardMajorLowPoints -->|Pass| TwoOfMajorLowPoints([Opener has only 2 of the major and <17 points])
-          FiveCardMajorLowPoints -->|3NT| TwoOfMajorHighPoints([Opener has only 2 of the major and 17 points])
-          FiveCardMajorLowPoints -->|3 of major| ThreeOfMajorLowPoints([Opener has 3+ of the major and <17 points])
-          FiveCardMajorLowPoints -->|4 of major| FourOfMajorHighPoints([Opener has 3+ of the major and 17 points])
+        TransferBid -->|3NT| TransferSwitchToMajor[Switch to the major]
+        TransferBid -->|the other major| Tools[Use the tools, Luke]
 
-
-        AfterMajorTransfer -->|3NT| FiveCardMajorHighPoints([Responder has exactly 5 cards and 10+ points])
-          FiveCardMajorHighPoints -->|Pass| OnlyTwo([Opener has 2 of the major])
-          FiveCardMajorHighPoints -->|4 of major| ThreeOrMore([Opener has 3 or more of the major])
-
-        AfterMajorTransfer -->|3 of major| SixCardMajorLowPoints([Responder has 6+ cards and 8-9 points])
-          SixCardMajorLowPoints -->|4 of major| Has17([Opener has 17 points])
-          SixCardMajorLowPoints -->|Pass| LessThan17([Opener has less than 17 points])
-
-        AfterMajorTransfer -->|4 of major| SixCardMajorHighPoints([Responder has 6+ cards and 10+ points])
-
-        AfterMajorTransfer -->|2S after transfer to 2H| HSTwoSuited([Responder is two suited with 5H and 4S and has 8+ points])
-          HSTwoSuited -->|"Use the (NT) tools, Luke"| Tools([Bid according to other patterns])
-
-        AfterMajorTransfer -->|3H after transfer to 2S| SHTwoSuited([Responder is two suited with 5S and 4H and has 10+ points])
-          SHTwoSuited -->|"Use the (NT) tools, to game, Luke"| Tools
-
-      TransferMajor -->|3 of major| SuperAcceptance([Super Acceptance - 17 points and 4 card support])
-        SuperAcceptance -->|"Use the (NT) tools, Luke"| Tools
-
-
-      TransferMinor -->|3C| AfterMinorTransfer([Accept the transfer])
-        AfterMinorTransfer -->|Pass| PreferClubs([Responder has clubs])
-        AfterMinorTransfer -->|3D| PreferDiamonds([Responder has diamonds])
+      TransferResponse -->|3C| TransferMinor>Select the right minor]
   end
+        TransferBid -->|pass, 4 of the major| NTDone
+          TransferInvite -->|pass, 4 of the major| NTDone
+          TransferSuitAndGameInvite -->|pass, 3NT, 3 of major, 4 of major| NTDone
+          TransferSwitchToMajor -->|pass, 4 of the major| NTDone
+          Tools --- NTDone
+        TransferMinor -->|pass, 3D| NTDone
 
-          LowPoints --- NTDone
-            TwoOfMajorLowPoints --- NTDone
-            TwoOfMajorHighPoints -->|Pass| NTDone
-            ThreeOfMajorLowPoints -->|Pass| NTDone
-            FourOfMajorHighPoints -->|Pass| NTDone
-            OnlyTwo --- NTDone
-            ThreeOrMore -->|Pass| NTDone
-            Has17 --- NTDone
-            LessThan17 --- NTDone
-          SixCardMajorHighPoints -->|Pass| NTDone
 
-          PreferClubs --- NTDone
-          PreferDiamonds -->|Pass| NTDone
-
-            Tools --- NTDone
