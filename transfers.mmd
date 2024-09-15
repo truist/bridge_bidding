@@ -1,53 +1,35 @@
 flowchart LR
   Open[Open]
-    Open -->|NT, regular| NTRespond>Respond to NT]
-    Open -->|NT, conventions| NTConventions>Respond to NT]
+    Open -->|NT, standard| NTStandard>"Respond to NT\n(standard)"]
+    Open -->|NT, conventions| NTConventions>"Respond to NT\n(conventions)"]
 
-  subgraph NTOpensGraph [non-stayman non-transfers]
-    NTRespond ---|"Sign off"| Spacer1{" "}
-      Spacer1 --> NTDoneRegular[["NT Done (regular)"]]
-    NTRespond -->|"2NT"| NTInvitational([Rebid after NT invite])
-      NTInvitational -->|Bid 3NT\nor Pass| NTDoneRegular
-    NTRespond -->|"3 of a major (forcing)"| NTForcing([Rebid after NT->Suit force])
-      NTForcing -->|Bid 3NT\nor 4 in the suit| NTDoneRegular
-  end
+    NTStandard ---|"Sign off"| Spacer1{" "}
+      Spacer1 --> NTDone[["NT Done"]]
+    NTStandard -->|"2NT"| NTInvitational([Rebid after NT invite])
+      NTInvitational -->|Bid 3NT\nor Pass| NTDone
+    NTStandard -->|"3 of a major (forcing)"| NTForcing([Rebid after NT->Suit force])
+      NTForcing -->|Bid 3NT\nor 4 in the suit| NTDone
 
-    NTConventions -->|"2C (Stayman)"| Stayman([Responder has at least one 4 card major and 8+ points])
-  subgraph StaymanGraph [Stayman]
-      Stayman -->|2D| NoMajor([Opener has no 4 card major])
-        NoMajor -->|2NT| NoFitInvitational([No suit fit, responder has <10 points])
-          NoFitInvitational -->|Pass| InvitationalLowPoints([Opener has <17 points])
-          NoFitInvitational  -->|3NT| InvitationalHighPoints([Opener has 17 points])
-        NoMajor -->|3NT| NTGame([Responder has 10+ points])
-      Stayman -->|2H| HeartMajor([Opener has 4 hearts, may have 4 spades])
-        HeartMajor -->|2NT| SpadeSecondChanceLowPoints([Responder has 4 spades and <10 points])
-          SpadeSecondChanceLowPoints -->|4S| SpadeChanceWonHighPoints([Opener has 4 spades and 17 points])
-          SpadeSecondChanceLowPoints -->|3NT| SpadeChanceLostHighPoints([Opener has <4 spades and 17 points])
-          SpadeSecondChanceLowPoints -->|Pass| InvitationalLowPoints
-        HeartMajor -->|3H| SuitInvitational([Suit fit, responder has <10 points])
-          SuitInvitational -->|Pass| InvitationalLowPoints
-          SuitInvitational -->|4 of suit| InvitationalHighPoints
-        HeartMajor -->|3NT| SpadeSecondChanceHighPoints([Responder has 4 spades and 10+ points])
-          SpadeSecondChanceHighPoints -->|4S| SpadeChanceWon([Opener has 4 spades])
-        HeartMajor -->|4H| GameFitResponder([Suit fit, responder has 10+ points])
-      Stayman -->|2S| SpadeMajor([Opener has 4 spades, does not have 4 hearts])
-        SpadeMajor -->|2NT| NoFitInvitational
-        SpadeMajor -->|3S| SuitInvitational
-        SpadeMajor -->|3NT| NoFitNT([No suit fit, responder has 10+ points])
-        SpadeMajor -->|4S| GameFitResponder
+    NTConventions -->|"2C (Stayman)"| Stayman([Required Stayman response])
+
+  subgraph StaymanGraph2 [Stayman]
+      Stayman -->|2D, 2S| StaymanNextBidSimple([Bid after Stayman])
+        StaymanNextBidSimple -->|invitation| StaymanInviteRespond([Respond to invite])
+      Stayman -->|2H| StaymanNextBidHearts([Bid after Stayman hearts bid])
+        StaymanNextBidHearts -->|3H| StaymanInviteRespond
+        StaymanNextBidHearts -->|2NT, 3NT| StaymanNoHeartFit([Bid after no heart fit])
   end
-            InvitationalLowPoints --- NTDone[["NT Done (conventions)"]]
-            InvitationalHighPoints -->|Pass| NTDone
-          NTGame -->|Pass| NTDone
-            SpadeChanceWonHighPoints -->|Pass| NTDone
-            SpadeChanceLostHighPoints -->|Pass| NTDone
-            SpadeChanceWon -->|Pass| NTDone
-          SpadeSecondChanceHighPoints -->|Pass| NTDone
-          NoFitNT -->|Pass| NTDone
-          GameFitResponder -->|Pass| NTDone
+          StaymanInviteRespond -->|game| NTDone
+          StaymanInviteRespond -->|pass| NTDone
+        StaymanNextBidSimple -->|game| NTDone
+        StaymanNextBidHearts -->|4H| NTDone
+          StaymanNoHeartFit -->|Pass, 4S, 3NT| NTDone
+
+
 
     NTConventions -->|"2D or 2H (transfer to major)"| TransferMajor([Responder has a 5+ card major])
-  subgraph MajorTransfer [Transfer to Major]
+    NTConventions -->|"2S (transfer to minor)"| TransferMinor([Responder has 6+ of minor and a weak hand])
+  subgraph Transfer [Transfers]
       TransferMajor -->|2 of major| AfterMajorTransfer([Accept the transfer])
         AfterMajorTransfer -->|Pass| LowPoints([Responder has 0-7 points])
 
@@ -68,7 +50,21 @@ flowchart LR
 
         AfterMajorTransfer -->|4 of major| SixCardMajorHighPoints([Responder has 6+ cards and 10+ points])
 
+        AfterMajorTransfer -->|2S after transfer to 2H| HSTwoSuited([Responder is two suited with 5H and 4S and has 8+ points])
+          HSTwoSuited -->|"Use the (NT) tools, Luke"| Tools([Bid according to other patterns])
+
+        AfterMajorTransfer -->|3H after transfer to 2S| SHTwoSuited([Responder is two suited with 5S and 4H and has 10+ points])
+          SHTwoSuited -->|"Use the (NT) tools, to game, Luke"| Tools
+
+      TransferMajor -->|3 of major| SuperAcceptance([Super Acceptance - 17 points and 4 card support])
+        SuperAcceptance -->|"Use the (NT) tools, Luke"| Tools
+
+
+      TransferMinor -->|3C| AfterMinorTransfer([Accept the transfer])
+        AfterMinorTransfer -->|Pass| PreferClubs([Responder has clubs])
+        AfterMinorTransfer -->|3D| PreferDiamonds([Responder has diamonds])
   end
+
           LowPoints --- NTDone
             TwoOfMajorLowPoints --- NTDone
             TwoOfMajorHighPoints -->|Pass| NTDone
@@ -80,27 +76,7 @@ flowchart LR
             LessThan17 --- NTDone
           SixCardMajorHighPoints -->|Pass| NTDone
 
-  subgraph AdvancedTools [Advanced / Tools]
-        AfterMajorTransfer -->|2S after transfer to 2H| HSTwoSuited([Responder is two suited with 5H and 4S and has 8+ points])
-          HSTwoSuited -->|"Use the (NT) tools, Luke"| Tools([Bid according to other patterns])
-
-        AfterMajorTransfer -->|3H after transfer to 2S| SHTwoSuited([Responder is two suited with 5S and 4H and has 10+ points])
-          SHTwoSuited -->|"Use the (NT) tools, to game, Luke"| Tools
-
-      TransferMajor -->|3 of major| SuperAcceptance([Super Acceptance - 17 points and 4 card support])
-        SuperAcceptance -->|"Use the (NT) tools, Luke"| Tools
-  end
-            Tools --- NTDone
-
-
-    NTConventions -->|"2S (transfer to minor)"| TransferMinor([Responder has 6+ of minor and a weak hand])
-  subgraph MinorTransfer [Transfer to Minor]
-      TransferMinor -->|3C| AfterMinorTransfer([Accept the transfer])
-        AfterMinorTransfer -->|Pass| PreferClubs([Responder has clubs])
-        AfterMinorTransfer -->|3D| PreferDiamonds([Responder has diamonds])
-  end
           PreferClubs --- NTDone
           PreferDiamonds -->|Pass| NTDone
 
-
-
+            Tools --- NTDone
