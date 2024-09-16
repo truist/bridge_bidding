@@ -8,7 +8,7 @@ flowchart LR
     subgraph NTOpensGraph [NT Opens and Responses]
 
       NTRespond ---|"Sign off"| Spacer1{" "}
-        Spacer1 --> NTDone[[NT Done]]
+        Spacer1 -->|"&nbsp;"| NTDone[[NT Done]]
       NTRespond ---|"2NT"| SpacerNT2{" "}
         SpacerNT2 ---|"&nbsp;"| SpacerNT4{" "}
           SpacerNT4 -->|"&nbsp;"| NTInvitational([Rebid after NT invite])
@@ -44,6 +44,10 @@ flowchart LR
           TransferBid -->|4 of the major, 3D, or Pass| NTDone
 
           TransferBid ---|The other major| SpacerNT6{" "}
+
+      NTConventions -->|"2NT"| SpacerNT2
+      NTConventions -->|"Game or Pass"| Spacer1
+
     end
 
     subgraph SuitOpensGraph [Suit Opens and Responses]
