@@ -7,51 +7,43 @@ flowchart LR
 
     subgraph NTOpensGraph [NT Opens and Responses]
 
-        NTRespond ---|"Sign off"| Spacer1{" "}
-          Spacer1 --> NTDone[[NT Done]]
-        NTRespond ---|"2NT"| SpacerNT2{" "}
-          SpacerNT2 ---|"&nbsp;"| SpacerNT4{" "}
-            SpacerNT4 -->|"&nbsp;"| NTInvitational([Rebid after NT invite])
-              NTInvitational -->|3NT or Pass| NTDone
-        NTRespond ---|"3 of a major\n(forcing)"| SpacerNT3{" "}
-          SpacerNT3 ---|"&nbsp;"| SpacerNT5{" "}
-            SpacerNT5 -->|"&nbsp;"| NTForcing([Rebid after NT->Suit force])
-              NTForcing -->|3NT or\n4 in the suit| NTDone
+      NTRespond ---|"Sign off"| Spacer1{" "}
+        Spacer1 --> NTDone[[NT Done]]
+      NTRespond ---|"2NT"| SpacerNT2{" "}
+        SpacerNT2 ---|"&nbsp;"| SpacerNT4{" "}
+          SpacerNT4 -->|"&nbsp;"| NTInvitational([Rebid after NT invite])
+            NTInvitational -->|3NT or Pass| NTDone
+      NTRespond ---|"3 of a major\n(forcing)"| SpacerNT3{" "}
+        SpacerNT3 ---|"&nbsp;"| SpacerNT5{" "}
+          SpacerNT5 -->|"&nbsp;"| NTForcing([Rebid after NT->Suit force])
+            NTForcing -->|3NT or\n4 in the suit| NTDone
 
+      NTConventions -->|"2C (Stayman)"| Stayman([Required Stayman response])
+        Stayman -->|2D, 2S| StaymanNextBidSimple>Bid after Stayman]
+          StaymanNextBidSimple -->|Invitation| NTInvite([Respond to invite])
+            NTInvite -->|Game or Pass| NTDone
+          StaymanNextBidSimple -->|Game| NTDone
 
-        NTConventions -->|"2C (Stayman)"| Stayman([Required Stayman response])
+        Stayman -->|2H| StaymanNextBidHearts>Bid after Stayman hearts bid]
+          StaymanNextBidHearts -->|2NT, 3NT| StaymanNoHeartFit([Bid after no heart fit])
+          StaymanNextBidHearts -->|3H| NTInvite
+          StaymanNextBidHearts -->|4H| NTDone
+            StaymanNoHeartFit -->|4S, 3NT, or Pass| NTDone
 
-          Stayman -->|2D, 2S| StaymanNextBidSimple>Bid after Stayman]
-          Stayman -->|2H| StaymanNextBidHearts>Bid after Stayman hearts bid]
-            StaymanNextBidHearts -->|2NT, 3NT| StaymanNoHeartFit([Bid after no heart fit])
+      NTConventions -->|"2D or 2H\n(Transfer to major)"| TransferResponse([Required transfer response])
+      NTConventions -->|"2S\n(Transfer to minor)"| TransferResponse
 
-            StaymanNextBidSimple -->|Invitation| NTInvite([Respond to invite])
-            StaymanNextBidHearts -->|3H| NTInvite
-            StaymanNextBidSimple -->|Game| NTDone
-            StaymanNextBidHearts -->|4H| NTDone
-              StaymanNoHeartFit -->|4S, 3NT, or Pass| NTDone
+        TransferResponse -->|2 of major, 3C| TransferBid[Bid after transfer]
+          TransferBid -->|2NT| TransferSuitAndGameInvite[Maybe the major invite]
+            TransferSuitAndGameInvite -->|3 or 4 of the major,\n3NT, or Pass| NTDone
 
+          TransferBid -->|3NT| TransferSwitchToMajor[Maybe the major]
+            TransferSwitchToMajor -->|4 of the major\nor Pass| NTDone
 
-              NTInvite -->|Game or Pass| NTDone
+          TransferBid -->|3 of the major| NTInvite([Respond to invite])
+          TransferBid -->|4 of the major, 3D, or Pass| NTDone
 
-
-        NTConventions -->|"2D or 2H\n(Transfer to major)"| TransferResponse([Required transfer response])
-        NTConventions -->|"2S\n(Transfer to minor)"| TransferResponse
-
-          TransferResponse -->|2 of major, 3C| TransferBid[Bid after transfer]
-            TransferBid -->|2NT| TransferSuitAndGameInvite[Maybe the major invite]
-
-            TransferBid -->|3NT| TransferSwitchToMajor[Maybe the major]
-
-            TransferBid -->|3 of the major| NTInvite([Respond to invite])
-            TransferBid -->|4 of the major, 3D, or Pass| NTDone
-              TransferSuitAndGameInvite -->|3 or 4 of the major,\n3NT, or Pass| NTDone
-              TransferSwitchToMajor -->|4 of the major\nor Pass| NTDone
-
-            TransferBid ---|The other major| SpacerNT6{" "}
-
-
-
+          TransferBid ---|The other major| SpacerNT6{" "}
     end
 
     subgraph SuitOpensGraph [Suit Opens and Responses]
