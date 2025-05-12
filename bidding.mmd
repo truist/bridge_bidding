@@ -4,6 +4,7 @@ flowchart LR
     Open -->|"NT (conventions)"| NTConventions>"Respond to NT\n(conventions)"]
     Open -->|1 of a major| MajorRespond[Respond to Major opening]
     Open -->|1 of a minor| MinorRespond[Respond to Minor opening]
+    Open -->|2C| 2CRespond[Respond to 2C opening]
 
     subgraph NTOpensGraph [NT Opens and Responses]
 
@@ -103,9 +104,45 @@ flowchart LR
       Cue ---|Any bid| Spacer8{" "}
     end
 
-      subgraph ToolsGraph [Bidding tools]
-        RespondMulti --> Tools{{Use the bidding tools until done}}
-        Spacer8 --> Tools
-        SpacerNT6 --> Tools
-      end
+    subgraph 2CGraph [2C Opens and Responses]
+      2CRespond -->|2D| Waiting[Waiting rebid]
+        Waiting -->|2NT| 2CRespond2NT[Respond to 2NT]
+          2CRespond2NT ---|Pass| SpacerW6{" "}
+            SpacerW6 ---|"&nbsp;"| SpacerW7{" "}
+              SpacerW7 -->|"&nbsp;"| 2CDone[2C Done]
+          2CRespond2NT -->|"3D or 3H\n(Transfer)"| 2CTransferResponse([Required transfer response])
+            2CTransferResponse -->|3H or 3S| 2CAfterTransfer[After-transfer response]
+              2CAfterTransfer -->|Pass| 2CDone
+              2CAfterTransfer ---|Any bid| SpacerW4{" "}
+          2CRespond2NT ---|"3C (Stayman) or 3NT"| SpacerW2{" "}
+          2CRespond2NT ---|4NT or 6NT| SpacerW3{" "}
+
+        Waiting -->|2 of a major| 2CRespond2Major[Respond to 2 of a major]
+          2CRespond2Major -->|2NT| 2CResponder2NT>Rebid after 2NT]
+            2CResponder2NT ---|Any bid| SpacerW9{" "}
+            SpacerW9 --> 2CDone
+          2CRespond2Major ---|Anything else| SpacerW5{" "}
+
+        Waiting ---|Anything else| SpacerW1{" "}
+
+      2CRespond -->|"Anything else"| Positive[Rebid after positive]
+        Positive ---|Any bid| SpacerP1{" "}
+    end
+
+    subgraph ToolsGraph [Bidding tools]
+      RespondMulti --> Tools{{Use the bidding tools until done}}
+      Spacer8 --> Tools
+      SpacerNT6 --> Tools
+      SpacerW1 --> Tools
+      SpacerW2 --> Tools
+      SpacerW4 --> Tools
+      SpacerW5 --> Tools
+      SpacerP1 --> Tools
+    end
+
+    subgraph SlamGraph [Slam bidding]
+      SpacerW3 --> Slam{{Slam bidding}}
+      Tools --> Slam
+    end
+
 
